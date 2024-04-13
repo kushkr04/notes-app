@@ -6,6 +6,7 @@ import Card from '../card/card';
 import { ThemeContext } from '../../context/theme/theme';
 import { StateContext } from '../../context/state/state';
 import { ADD_NOTE, SET_EDIT_MODE, UPDATE_NOTE } from '../../actions';
+import { addNote, updateNote } from '../../services/notes-service';
 
 function AddNote(){
 
@@ -17,22 +18,25 @@ function AddNote(){
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
         setText(e.target.value);
     }
-    const handleClick = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+    const handleClick = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
         e.preventDefault();
-        if (state.editMode){
-            state.noteToEdit && 
-            dispatch({type: UPDATE_NOTE,payload: {
+        if (state.editMode && state.noteToEdit){
+            const updatedNoteData = {
                 text,
                 level,
                 id: state.noteToEdit.id
-            }});
+            };
+            await updateNote(updatedNoteData);
+            dispatch({type: UPDATE_NOTE,payload: updatedNoteData});
             dispatch({type: SET_EDIT_MODE,payload: false}); 
         } else {
-            dispatch({type: ADD_NOTE,payload: {
+            const noteData = {
                 text,
                 level,
                 id: uuid4()
-            }});
+            };
+            await addNote(noteData);
+            dispatch({type: ADD_NOTE,payload: noteData});
         }
         setText('');
         setLevel('low');
@@ -53,7 +57,6 @@ function AddNote(){
             setNoteContent(state.noteToEdit);
         }
     }, [state.noteToEdit, state.editMode])
-    
 
     return (
         <Card bgColor={theme==='dark'?'#333':'#ddd'}>

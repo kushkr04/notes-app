@@ -1,12 +1,13 @@
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import './App.css';
 import { ThemeContext } from './context/theme/theme';
 import Home from './pages/home/home';
 import Switch from "react-switch";
 import { FaSun, FaMoon } from 'react-icons/fa';
-import { Notes } from './components/note/data';
+// import { Notes } from './components/note/data';
 import { StateContext, StateType } from './context/state/state';
-import { ADD_NOTE, DELETE_NOTE, SET_EDIT_MODE, SET_NOTE_FOR_EDIT, UPDATE_NOTE } from './actions';
+import { ADD_NOTE, DELETE_NOTE, INIT_NOTES, SET_EDIT_MODE, SET_NOTE_FOR_EDIT, UPDATE_NOTE } from './actions';
+import { fetchNotes } from './services/notes-service';
 
 function App() {
   const [theme, setTheme] = useState('light');
@@ -29,10 +30,20 @@ function App() {
         let editedNotes = [...state.notes];
         editedNotes.splice(index,1);
         return {...state, notes:editedNotes};
+      case INIT_NOTES:
+        return {...state, notes:action.payload}
       default:
         return state;
     }
-  }, {notes:Notes, editMode: false, noteToEdit: null});
+  }, {notes:[], editMode: false, noteToEdit: null});
+
+  useEffect(()=>{
+    async function initializeNotes(){
+      const notes = await fetchNotes();
+      dispatch({type: INIT_NOTES, payload: notes});
+    }
+    initializeNotes();
+  }, []);
 
   const changeHandler = (check:boolean)=>{
     setChecked(!checked);
