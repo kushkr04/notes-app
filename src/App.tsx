@@ -24,6 +24,7 @@ function App() {
         const indexUpdated = state.notes.findIndex(note=>note.id===action.payload.id);
         let editedNotesUpdated = [...state.notes];
         editedNotesUpdated.splice(indexUpdated,1,action.payload);
+        editedNotesUpdated.unshift(action.payload);
         return {...state, notes: editedNotesUpdated};
       case DELETE_NOTE:
         const index = state.notes.findIndex(note=>note.id===action.payload);

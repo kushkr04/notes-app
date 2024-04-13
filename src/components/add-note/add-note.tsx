@@ -24,7 +24,9 @@ function AddNote(){
             const updatedNoteData = {
                 text,
                 level,
-                id: state.noteToEdit.id
+                id: state.noteToEdit.id,
+                createdAt: state.noteToEdit.createdAt,
+                updatedAt: new Date()
             };
             await updateNote(updatedNoteData);
             dispatch({type: UPDATE_NOTE,payload: updatedNoteData});
@@ -33,7 +35,9 @@ function AddNote(){
             const noteData = {
                 text,
                 level,
-                id: uuid4()
+                id: uuid4(),
+                createdAt: new Date(),
+                updatedAt: new Date()
             };
             await addNote(noteData);
             dispatch({type: ADD_NOTE,payload: noteData});

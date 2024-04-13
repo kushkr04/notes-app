@@ -17,10 +17,7 @@ function Home() {
       <div>
         {
           state.notes.map(note => <Note 
-            id={note.id} 
-            key={note.id} 
-            level={note.level as Level} 
-            text={note.text} 
+            key={note.id}
             note={note}
             ></Note>)
         }

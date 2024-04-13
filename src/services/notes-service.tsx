@@ -1,8 +1,11 @@
 import { NoteType } from "../components/note/note-type";
 
 export async function fetchNotes(){
-    const response = await fetch('/notes');
-    return await response.json();
+    const response = await fetch('/notes?_sort=updatedAt&_order=desc');
+    const notes = await response.json();
+    // to explicitly convert received date string to date object
+    // return notes.map((note: NoteType)=>({...note, createdAt: new Date(note.createdAt)}));
+    return notes;
   }
 export async function addNote(note: NoteType){
     const response = await fetch('/notes',{

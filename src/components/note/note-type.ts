@@ -3,7 +3,9 @@ export type Level = 'low' | 'medium' | 'high'
 export type NoteType = {
     id:string,
     text: string,
-    level: 'high' | 'medium' | 'low'
+    level: Level,
+    createdAt: Date,
+    updatedAt: Date
 }
 
 export enum ColorLight {

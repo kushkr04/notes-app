@@ -9,9 +9,6 @@ import { StateContext } from '../../context/state/state';
 import { deleteNote } from '../../services/notes-service';
 
 type NoteProps = {
-    id: string,
-    text: string,
-    level: 'low' | 'medium' | 'high',
     note: NoteType
 }
 
@@ -24,17 +21,16 @@ function Note(props: NoteProps){
       }
     const handleDelete = async (id:string)=>{
         await deleteNote(id);
-        dispatch({type: DELETE_NOTE, payload: props.id});
+        dispatch({type: DELETE_NOTE, payload: props.note.id});
     }
     return (
-        <Card bgColor={theme === 'dark' ? props.level && ColorDark[props.level] : props.level && ColorLight[props.level]}>
+        <Card bgColor={theme === 'dark' ? props.note.level && ColorDark[props.note.level] : props.note.level && ColorLight[props.note.level]}>
             <>
-            <div>
-                {props.text}
-            </div>
+            <div>{props.note.text}</div>
+            <div className='left-corner date'>{props.note.updatedAt.toLocaleString()}</div>
             <div className='right-corner'>
                 <FaEdit onClick={()=>editNote(props.note)}></FaEdit>
-                <FaTrash onClick={()=>handleDelete(props.id)}></FaTrash>
+                <FaTrash onClick={()=>handleDelete(props.note.id)}></FaTrash>
             </div>
             </>
         </Card>
