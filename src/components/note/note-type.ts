@@ -13,7 +13,7 @@ export enum ColorLight {
 }
 
 export enum ColorDark {
-    high='#53151',
+    high='#861515',
     medium='#828227',
     low='#265226'
 }

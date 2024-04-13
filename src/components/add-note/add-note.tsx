@@ -4,36 +4,35 @@ import {NoteType, Level} from '../note/note-type'
 import {v4 as uuid4} from 'uuid'
 import Card from '../card/card';
 import { ThemeContext } from '../../context/theme/theme';
+import { StateContext } from '../../context/state/state';
+import { ADD_NOTE, SET_EDIT_MODE, UPDATE_NOTE } from '../../actions';
 
-type AddNoteProps = {
-    addNote: (note: NoteType) => void;
-    editMode: Boolean;
-    noteToEdit: NoteType | null;
-    updateNote: (updatedNote: NoteType) => void
-}
-
-function AddNote(props: AddNoteProps){
+function AddNote(){
 
     const [text, setText] = useState("");
     const [level, setLevel] = useState<Level>('low');
     const theme = useContext(ThemeContext);
+    const {state, dispatch} = useContext(StateContext);
+
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
         setText(e.target.value);
     }
     const handleClick = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
         e.preventDefault();
-        if (props.editMode){
-            props.noteToEdit && props.updateNote({
+        if (state.editMode){
+            state.noteToEdit && 
+            dispatch({type: UPDATE_NOTE,payload: {
                 text,
                 level,
-                id: props.noteToEdit.id
-            });
+                id: state.noteToEdit.id
+            }});
+            dispatch({type: SET_EDIT_MODE,payload: false}); 
         } else {
-            props.addNote({
+            dispatch({type: ADD_NOTE,payload: {
                 text,
                 level,
                 id: uuid4()
-            });
+            }});
         }
         setText('');
         setLevel('low');
@@ -50,10 +49,10 @@ function AddNote(props: AddNoteProps){
     }
 
     useEffect(()=>{
-        if (props.noteToEdit && props.editMode){
-            setNoteContent(props.noteToEdit);
+        if (state.noteToEdit && state.editMode){
+            setNoteContent(state.noteToEdit);
         }
-    }, [props.noteToEdit, props.editMode])
+    }, [state.noteToEdit, state.editMode])
     
 
     return (
@@ -65,7 +64,7 @@ function AddNote(props: AddNoteProps){
                     <option value="medium">Medium</option>
                     <option value="low">Low</option>
                 </select>
-                <button onClick={handleClick}>{props.editMode?'edit':'add'}</button>
+                <button onClick={handleClick}>{state.editMode?'edit':'add'}</button>
             </form>
         </Card>
     )

@@ -1,20 +1,26 @@
 import { useContext } from 'react';
 import Card from '../card/card';
-import { ColorLight, ColorDark } from './note-type';
+import { ColorLight, ColorDark, NoteType } from './note-type';
 import './note.css';
 import {FaEdit, FaTrash} from 'react-icons/fa';
 import { ThemeContext } from '../../context/theme/theme';
+import { DELETE_NOTE, SET_EDIT_MODE, SET_NOTE_FOR_EDIT } from '../../actions';
+import { StateContext } from '../../context/state/state';
 
 type NoteProps = {
     id: string,
     text: string,
-    level?: 'low' | 'medium' | 'high',
-    editNote: (id: string) => void,
-    deleteNote: (id: string) => void
+    level: 'low' | 'medium' | 'high',
+    note: NoteType
 }
 
 function Note(props: NoteProps){
     const theme = useContext(ThemeContext);
+    const {dispatch} = useContext(StateContext);
+    const editNote = (note: NoteType)=>{
+        dispatch({type: SET_EDIT_MODE,payload: true});
+        dispatch({type: SET_NOTE_FOR_EDIT, payload: note});
+      }
     return (
         <Card bgColor={theme === 'dark' ? props.level && ColorDark[props.level] : props.level && ColorLight[props.level]}>
             <>
@@ -22,8 +28,8 @@ function Note(props: NoteProps){
                 {props.text}
             </div>
             <div className='right-corner'>
-                <FaEdit onClick={()=>props.editNote(props.id)}></FaEdit>
-                <FaTrash onClick={()=>props.deleteNote(props.id)}></FaTrash>
+                <FaEdit onClick={()=>editNote(props.note)}></FaEdit>
+                <FaTrash onClick={()=>dispatch({type: DELETE_NOTE, payload: props.id})}></FaTrash>
             </div>
             </>
         </Card>
