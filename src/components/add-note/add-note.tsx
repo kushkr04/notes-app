@@ -15,7 +15,7 @@ function AddNote(){
     const theme = useContext(ThemeContext);
     const {state, dispatch} = useContext(StateContext);
 
-    const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleChange = (e:React.ChangeEvent<HTMLTextAreaElement>)=>{
         setText(e.target.value);
     }
     const handleClick = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
@@ -65,7 +65,8 @@ function AddNote(){
     return (
         <Card bgColor={theme==='dark'?'#333':'#ddd'}>
             <form className='add-note'>
-                <input type="text" onChange={handleChange} value={text}/>
+                <textarea onChange={handleChange} value={text}></textarea>
+                {/* <input type="text" onChange={handleChange} value={text}/> */}
                 <select onChange={handleSelect} value={level}>
                     <option value="high">High</option>
                     <option value="medium">Medium</option>

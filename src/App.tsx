@@ -8,6 +8,25 @@ import { FaSun, FaMoon } from 'react-icons/fa';
 import { StateContext, StateType } from './context/state/state';
 import { ADD_NOTE, DELETE_NOTE, INIT_NOTES, SET_EDIT_MODE, SET_NOTE_FOR_EDIT, UPDATE_NOTE } from './actions';
 import { fetchNotes } from './services/notes-service';
+import DetailedNote from './pages/detailed-note/detailed-note';
+
+import {
+  createBrowserRouter,
+  RouterProvider
+} from "react-router-dom";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <Home></Home>
+    ),
+  },
+  {
+    path: ":id",
+    element: <DetailedNote></DetailedNote>,
+  },
+]);
 
 function App() {
   const [theme, setTheme] = useState('light');
@@ -57,6 +76,7 @@ function App() {
   return (
     <StateContext.Provider value={{state, dispatch}}>
       <ThemeContext.Provider value={theme}>
+        <div className={`App ${theme}`}>
         <Switch onChange={changeHandler} 
         checked={checked} 
         className='react-switch' 
@@ -67,7 +87,8 @@ function App() {
         onHandleColor='#333' 
         offHandleColor='#ddd'
         />
-        <Home></Home>
+        <RouterProvider router={router} />
+        </div>
       </ThemeContext.Provider>
     </StateContext.Provider>
   );

@@ -1,7 +1,9 @@
 .home {
-  margin: 0;
+  margin: auto;
+  max-width: 40rem;
   text-align: center;
   padding-top: 1rem;
+  min-height: 100vh;
 }
 
 .home h2{

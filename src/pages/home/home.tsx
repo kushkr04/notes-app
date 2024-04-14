@@ -2,7 +2,6 @@ import './home.css';
 import Note from '../../components/note/note'
 import AddNote from '../../components/add-note/add-note';
 import { useContext } from 'react';
-import { Level } from '../../components/note/note-type';
 import { ThemeContext } from '../../context/theme/theme';
 import { StateContext } from '../../context/state/state';
 
@@ -19,6 +18,8 @@ function Home() {
           state.notes.map(note => <Note 
             key={note.id}
             note={note}
+            isDetailed={false}
+            height='6'
             ></Note>)
         }
       </div>
